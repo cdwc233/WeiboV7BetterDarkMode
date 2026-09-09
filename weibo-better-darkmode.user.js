@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Weibo Dark Mode Fix
+// @name         微博更好的深色模式
 // @namespace    local.weibo-dark-mode-fix
-// @version      1.6.22
-// @description  Apply a configurable dark theme to Weibo video and search pages.
+// @version      1.0.0
+// @description  给微博V7提供更好的深色模式
 // @match        https://weibo.com/*
 // @match        https://www.weibo.com/*
 // @match        https://s.weibo.com/*
