@@ -1,9 +1,10 @@
-# weibo-better-darkmode
-给微博V7提供更好的深色模式
+给微博V7提供更好的深色模式，点击
+[这里](https://raw.githubusercontent.com/cdwc233/weibo-better-darkmode/refs/heads/main/weibo-better-darkmode.user.js)
+通过脚本加载器安装
 
 <img width="376" height="99" alt="image" src="https://github.com/user-attachments/assets/826356ef-c64d-4bdb-bb58-f22f3c3ddead" />
 
-提供开关或者跟随浏览器
+提供开/关或者跟随浏览器
 
 主要功能：
 1.修复主页深色模式进入微博TV导致的深色模式丢失问题
