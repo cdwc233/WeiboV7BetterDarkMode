@@ -6,6 +6,7 @@
 // @match        https://weibo.com/*
 // @match        https://www.weibo.com/*
 // @match        https://s.weibo.com/*
+// @license      MIT
 // @run-at       document-start
 // @grant        GM_getValue
 // @grant        GM_setValue
