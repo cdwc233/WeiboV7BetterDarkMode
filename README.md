@@ -10,6 +10,7 @@
 
 1. 修复主页深色模式进入微博TV导致的深色模式丢失问题
 2. 给搜索页适配深色模式
+3. 给头条文章页面适配深色模式
 
 <img width="2065" height="1389" alt="image" src="https://github.com/user-attachments/assets/8aa6f7e8-a881-4f01-868e-b31f3f8f7656" />
 
