@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         微博更好的深色模式
-// @namespace    local.weibo-dark-mode-fix
-// @version      1.0.0
+// @namespace    local.weibo-better-dark-mode
+// @version      1.4.3
 // @description  给微博V7提供更好的深色模式
 // @match        https://weibo.com/*
 // @match        https://www.weibo.com/*
@@ -27,9 +27,11 @@
     const menuPrefix = '\u6df1\u8272\u6a21\u5f0f\uff1a';
     const preloadAttribute = 'data-weibo-tv-dark-preload';
     const searchAttribute = 'data-weibo-search-dark';
+    const articleAttribute = 'data-weibo-article-dark';
     const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
     let preloadStyle = null;
     let searchStyle = null;
+    let articleStyle = null;
     let pending = false;
     let themeMode = readThemeMode();
 
@@ -128,7 +130,7 @@
             /* Keep topic, mention, and other links in post bodies recognizable. */
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="feed_list_content"], .card-feed .txt) a[href],
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="feed_list_content"], .card-feed .txt) a[href] * {
-                color: #ff8200 !important;
+                color: #eb7350 !important;
             }
             /* Quoted or reposted posts use their own legacy card surface. */
             html[${searchAttribute}] #pl_feedlist_index .card-comment .con,
@@ -851,6 +853,417 @@
         (document.head || root).appendChild(searchStyle);
     }
 
+    function setArticleTheme(root, enabled) {
+        root.toggleAttribute(articleAttribute, enabled);
+        if (!enabled || (articleStyle && articleStyle.isConnected)) return;
+
+        articleStyle = document.createElement('style');
+        articleStyle.textContent = `
+            html[${articleAttribute}],
+            html[${articleAttribute}] body,
+            html[${articleAttribute}] #articleRoot,
+            html[${articleAttribute}] .WB_miniblog_fb {
+                background-color: #111111 !important;
+                color: #e7e7e7 !important;
+                color-scheme: dark;
+            }
+            html[${articleAttribute}] .WB_global_nav :is(.S_txt1, .S_ficon, .S_ficon_dis),
+            html[${articleAttribute}] [node-type="sidebar"] .W_ficon {
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] .WB_global_nav :is(.S_spetxt, a:hover, a:hover .S_txt1, a:hover .S_ficon) {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] .WB_global_nav :is(.gn_search .W_input, .gn_search_v2) {
+                background-color: #282828 !important;
+                border-color: #454545 !important;
+                color: #e7e7e7 !important;
+                box-shadow: none !important;
+            }
+            html[${articleAttribute}] .WB_global_nav .gn_search_v2 :is(.placeholder, .W_input) {
+                background-color: transparent !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] .WB_global_nav :is(.gn_search .W_input:focus, .gn_clicked .W_input, .gn_clicked_v2) {
+                background-color: #282828 !important;
+                border-color: #eb7350 !important;
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] .WB_global_nav .gn_search .W_input::placeholder {
+                color: #8a8a8a !important;
+            }
+            html[${articleAttribute}] .WB_global_nav .ficon_search {
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] .WB_global_nav :is(.gn_search:focus-within, .gn_clicked) .ficon_search {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] .WB_global_nav .gn_topmenulist {
+                background-color: #191919 !important;
+                border-color: #454545 !important;
+                color: #e7e7e7 !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+            }
+            html[${articleAttribute}] .WB_global_nav .gn_topmenulist :is(a, .S_txt1, .S_txt2) {
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] .WB_global_nav :is(.gn_set, .gn_set_v2, .gn_login, .gn_topmenulist ul li.line) {
+                border-color: #454545 !important;
+            }
+            html[${articleAttribute}] .WB_global_nav .gn_topmenulist ul li:hover,
+            html[${articleAttribute}] .WB_global_nav .gn_topmenulist ul li a:hover {
+                background-color: #303030 !important;
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #articleRoot > .WB_miniblog_fb > div:first-child,
+            html[${articleAttribute}] .WB_global_nav {
+                background-color: #191919 !important;
+                color: #bfbfbf !important;
+                border-color: #353535 !important;
+            }
+            html[${articleAttribute}] #pl_common_footer,
+            html[${articleAttribute}] .WB_footer.S_bg2,
+            html[${articleAttribute}] #WB_footer_public {
+                background-color: #191919 !important;
+                color: #bfbfbf !important;
+                border-color: #353535 !important;
+            }
+            html[${articleAttribute}] #pl_common_footer {
+                width: 100vw !important;
+                max-width: none !important;
+                margin-left: calc(50% - 50vw) !important;
+                background-color: #191919 !important;
+            }
+            html[${articleAttribute}] #plc_main .WB_cardwrap.S_bg2,
+            html[${articleAttribute}] #plc_main .WB_artical,
+            html[${articleAttribute}] #plc_main .artical_add_box,
+            html[${articleAttribute}] #plc_main .PCD_counter_b,
+            html[${articleAttribute}] #plc_main .otherlist,
+            html[${articleAttribute}] #commonts_container {
+                background-color: #191919 !important;
+                color: #e7e7e7 !important;
+                border-color: #353535 !important;
+                box-shadow: none !important;
+            }
+            html[${articleAttribute}] #plc_main :is(.WB_cardwrap, .WB_artical, .artical_add_box, .PCD_counter_b, .otherlist, .WB_editor_iframe_word, .WB_editor_iframe_new, .main_editor, #commonts_container) * {
+                border-color: #353535 !important;
+            }
+            html[${articleAttribute}] #plc_main .main_editor .title,
+            html[${articleAttribute}] #plc_main .WB_editor_iframe_word,
+            html[${articleAttribute}] #plc_main .WB_editor_iframe_word :is(p, section, span, strong),
+            html[${articleAttribute}] #plc_main :is(.otherlist .title, .PCD_pictext_i, .artical_add_box, .PCD_counter_b),
+            html[${articleAttribute}] #commonts_container :is(p, span, div, label) {
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] #plc_main :is(.authorinfo, .preface_v2, .authorinfo .time, .authorinfo .num, .WB_editor_iframe_word figcaption),
+            html[${articleAttribute}] #commonts_container :is(.from, [class*="time"], [class*="meta"]) {
+                color: #a9a9a9 !important;
+            }
+            html[${articleAttribute}] #plc_main :is(.WB_editor_iframe_word, .WB_editor_iframe_new) a,
+            html[${articleAttribute}] #plc_main :is(.authorinfo, .otherlist, .PCD_counter_b, .artical_add_box) a,
+            html[${articleAttribute}] #commonts_container a[href] {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #plc_main :is(.WB_editor_iframe_word, .WB_editor_iframe_new) a:hover,
+            html[${articleAttribute}] #plc_main :is(.authorinfo, .otherlist, .PCD_counter_b, .artical_add_box) a:hover,
+            html[${articleAttribute}] #commonts_container a[href]:hover {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #plc_main .authorinfo .W_icon_original {
+                background-color: #131313 !important;
+                border-color: #454545 !important;
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #plc_main .artical_add_box .btn_line::before {
+                background-image: linear-gradient(to bottom, rgba(25, 25, 25, 0), #191919) !important;
+            }
+            html[${articleAttribute}] #plc_main .artical_add_box .btn_line :is(.inner, .tips) {
+                background-color: #191919 !important;
+            }
+            html[${articleAttribute}] #plc_main .artical_add_box .tips {
+                color: #a9a9a9 !important;
+            }
+            html[${articleAttribute}] #plc_main .PCD_counter_b .title a,
+            html[${articleAttribute}] #plc_main .PCD_counter_b .opt .W_btn_b {
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] #plc_main .PCD_counter_b .text a {
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #plc_main .PCD_counter_b :is(.title a, .text a, .opt .W_btn_b):hover {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #plc_main .PCD_counter_b,
+            html[${articleAttribute}] #plc_main .PCD_counter_b :is(.WB_innerwrap, .userbox, .midbox) {
+                background-color: #131313 !important;
+            }
+            html[${articleAttribute}] #plc_main .otherlist .pt_li {
+                background-color: #191919 !important;
+                border-color: #353535 !important;
+            }
+            html[${articleAttribute}] #plc_main .otherlist .pt_li .title a {
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] #plc_main .otherlist .pt_li .text {
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #plc_main .otherlist .pt_li .title a:hover {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #plc_main .special-column,
+            html[${articleAttribute}] #plc_main .special-column :is(.special-title, .special-content) {
+                background-color: #131313 !important;
+                border-color: #353535 !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #plc_main .special-column :is(.special-title, .special-content) a {
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] #plc_main .special-column .column-orange,
+            html[${articleAttribute}] #plc_main .special-column a:not(.special-button-disable):hover {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #plc_main .special-column .special-total,
+            html[${articleAttribute}] #plc_main .special-column .special-button-disable {
+                color: #8a8a8a !important;
+            }
+            html[${articleAttribute}] #plc_main .special-column .special-content-line {
+                background-color: #454545 !important;
+            }
+            html[${articleAttribute}] #plc_main .special-column .special-button {
+                background-color: transparent !important;
+                border-color: #bfbfbf !important;
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] #plc_main .special-column .special-button:not(.special-button-disable):hover {
+                background-color: transparent !important;
+                border-color: #eb7350 !important;
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #plc_main .special-column .special-button-disable {
+                border-color: #454545 !important;
+                background-color: transparent !important;
+            }
+            html[${articleAttribute}] #plc_main .special-column svg path {
+                stroke: #8a8a8a !important;
+            }
+            html[${articleAttribute}] #plc_main .specolumn_tit {
+                background-color: #131313 !important;
+                border-color: #353535 !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #plc_main .specolumn_tit :is(.W_fl, .W_fr, .S_txt2) {
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #plc_main .specolumn_tit .S_link1,
+            html[${articleAttribute}] #plc_main .specolumn_tit:hover .S_link1 {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #plc_main .specolumn_tit .W_ficon {
+                color: #8a8a8a !important;
+            }
+            html[${articleAttribute}] #plc_main [data-weibo-article-light-surface] {
+                background-color: #191919 !important;
+                border-color: #454545 !important;
+            }
+            html[${articleAttribute}] #plc_main :is(pre, code, blockquote, table)[data-weibo-article-light-surface] {
+                background-color: #2c2c2c !important;
+            }
+            html[${articleAttribute}] #plc_main [data-weibo-article-dark-text] {
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] #commonts_container :is(textarea, input, [contenteditable="true"], [data-weibo-comment-editor-surface]) {
+                background-color: #282828 !important;
+                color: #e7e7e7 !important;
+                border-color: #454545 !important;
+                box-shadow: none !important;
+            }
+            html[${articleAttribute}] #commonts_container [data-weibo-comment-light-surface]:not([data-weibo-comment-editor-surface]) {
+                background-color: #191919 !important;
+                border-color: #353535 !important;
+                color: #bfbfbf !important;
+                box-shadow: none !important;
+            }
+            html[${articleAttribute}] #commonts_container [data-weibo-comment-light-surface]:not([data-weibo-comment-editor-surface]) :is(p, span, div) {
+                background-color: transparent !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #commonts_container ._container_13iyx_6 > ._wrap_13iyx_11 > .woo-panel-main._wrap_sgxhe_2 {
+                background-color: #191919 !important;
+                border-color: #353535 !important;
+                color: #bfbfbf !important;
+                box-shadow: none !important;
+            }
+            html[${articleAttribute}] #commonts_container ._container_13iyx_6 > ._wrap_13iyx_11 > .woo-panel-main._wrap_sgxhe_2 :is(div, p, span) {
+                background-color: transparent !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #commonts_container ._mar2_1s7ta_12 .woo-tip-warn {
+                background-color: #daeeff !important;
+                color: #507daf !important;
+                border-color: transparent !important;
+            }
+            html[${articleAttribute}] #commonts_container ._mar2_1s7ta_12 .woo-tip-warn :is(.woo-tip-text, .woo-tip-warnFill) {
+                color: #507daf !important;
+                fill: #507daf !important;
+            }
+            html[${articleAttribute}] #commonts_container .wbpro-form {
+                background-color: #282828 !important;
+                border-color: #454545 !important;
+                box-shadow: none !important;
+                outline: none !important;
+            }
+            html[${articleAttribute}] #commonts_container .wbpro-form:focus-within,
+            html[${articleAttribute}] #commonts_container .wbpro-form.focus {
+                background-color: #282828 !important;
+                border-color: #eb7350 !important;
+                box-shadow: none !important;
+            }
+            html[${articleAttribute}] #commonts_container .wbpro-form textarea {
+                background-color: transparent !important;
+                color: #e7e7e7 !important;
+                border-color: transparent !important;
+                box-shadow: none !important;
+                outline: none !important;
+            }
+            html[${articleAttribute}] #commonts_container [class*="_count_"] {
+                background-color: transparent !important;
+                border-color: #454545 !important;
+                color: #bfbfbf !important;
+                box-shadow: none !important;
+            }
+            html[${articleAttribute}] #commonts_container [class*="_count_"] * {
+                background-color: transparent !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #commonts_container [class*="_box1_8w68g_"] {
+                background-color: #191919 !important;
+                border-color: #454545 !important;
+                color: #e7e7e7 !important;
+                box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+            }
+            html[${articleAttribute}] #commonts_container [class*="_box1_8w68g_"] :is(.woo-pop, .woo-pop-main, .woo-pop-content, .woo-pop-inner, [class*="_tab_8w68g_"], [class*="_facebox1_8w68g_"], .wbpro-scrollbar) {
+                background-color: #191919 !important;
+                border-color: #454545 !important;
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] #commonts_container [class*="_tabtit_8w68g_"] {
+                border-color: #454545 !important;
+            }
+            html[${articleAttribute}] #commonts_container [class*="_tabtit_8w68g_"] :is([class*="active"], [class*="cur"], [aria-selected="true"]) {
+                border-color: #eb7350 !important;
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #commonts_container [class*="_box1_8w68g_"] .wbpro-iconbed:hover {
+                background-color: transparent !important;
+            }
+            html[${articleAttribute}] #commonts_container [class*="_box1_8w68g_"] .wbpro-scrollbar::-webkit-scrollbar-track {
+                background-color: #191919 !important;
+            }
+            html[${articleAttribute}] #commonts_container [class*="_box1_8w68g_"] .wbpro-scrollbar::-webkit-scrollbar-thumb {
+                background-color: #454545 !important;
+            }
+            html[${articleAttribute}] #commonts_container button:not([data-weibo-comment-submit]) {
+                background-color: transparent !important;
+                border-color: transparent !important;
+                box-shadow: none !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #commonts_container button[data-weibo-comment-submit],
+            html[${articleAttribute}] #plc_main .W_btn_a,
+            html[${articleAttribute}] #plc_main .W_btn_b {
+                background-color: #2c2c2c !important;
+                color: #e7e7e7 !important;
+                border-color: #454545 !important;
+            }
+            html[${articleAttribute}] #commonts_container button[data-weibo-comment-submit]:hover,
+            html[${articleAttribute}] #plc_main :is(.W_btn_a, .W_btn_b):hover {
+                background-color: #303030 !important;
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] .woo-modal-wrap .woo-modal-mask {
+                background-color: rgba(0, 0, 0, 0.72) !important;
+            }
+            html[${articleAttribute}] .woo-modal-wrap {
+                --w-card-background: #191919;
+                --w-input-background: #282828;
+                --w-dividing-line: #353535;
+                --w-main: #e7e7e7;
+                --w-sub: #bfbfbf;
+            }
+            html[${articleAttribute}] .woo-modal-wrap :is(.woo-modal-main, .wbpro-layer, .woo-panel-main, .wbpro-list, .wbpro-list .list2) {
+                background-color: #191919 !important;
+                color: #e7e7e7 !important;
+                border-color: #353535 !important;
+            }
+            html[${articleAttribute}] .woo-modal-wrap :is([class*="_initLoad_"], [class*="_loading_"], [class*="_empty_"]) {
+                background-color: #191919 !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] .woo-modal-wrap :is(.wbpro-layer, .wbpro-list) * {
+                border-color: #353535 !important;
+            }
+            html[${articleAttribute}] .woo-modal-wrap .wbpro-list :is(.list, .list2, .wbpro-tab3, [class*="text"], [class*="time"], [class*="from"]) {
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] .woo-modal-wrap .wbpro-list a[href] {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] .woo-modal-wrap .wbpro-list :is([class*="active"], [class*="cur"], [class*="selected"]) {
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] .woo-modal-wrap .wbpro-list :is(button, .wbpro-iconbed, .woo-font) {
+                background-color: transparent !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] .woo-modal-wrap .wbpro-list :is(button, .wbpro-iconbed):hover {
+                background-color: #303030 !important;
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #WB_footer_public a {
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #WB_footer_public .footer_link,
+            html[${articleAttribute}] #WB_footer_public > dl {
+                background-color: #191919 !important;
+            }
+            html[${articleAttribute}] #WB_footer_public .footer_copy,
+            html[${articleAttribute}] #WB_footer_public > div {
+                background-color: #191919 !important;
+            }
+            html[${articleAttribute}] #WB_footer_public .other_link.S_bg1 {
+                background-color: #191919 !important;
+                border-color: #353535 !important;
+            }
+            html[${articleAttribute}] #WB_footer_public .other_link :is(p, span, a) {
+                background-color: transparent !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #WB_footer_public :is(dt, dd, p, span) {
+                background-color: transparent !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] #WB_footer_public dt {
+                color: #e7e7e7 !important;
+            }
+            html[${articleAttribute}] [node-type="sidebar"] :is(.W_gotop, .S_ficon_bg),
+            html[${articleAttribute}] :is(.WB_webim, .WB_webim_fold, .WB_webim_wrap, .WB_webim .W_layer) {
+                background-color: #353535 !important;
+                border-color: #454545 !important;
+                color: #bfbfbf !important;
+            }
+            html[${articleAttribute}] [node-type="sidebar"] :is(.W_gotop, .S_ficon_bg):hover,
+            html[${articleAttribute}] :is(.WB_webim, .WB_webim_fold, .WB_webim_wrap) a:hover {
+                background-color: #454545 !important;
+                color: #eb7350 !important;
+            }
+            html[${articleAttribute}] #WB_footer_public a:hover {
+                color: #eb7350 !important;
+            }
+        `;
+        (document.head || root).appendChild(articleStyle);
+    }
+
     function markUserFollowControls() {
         document.querySelectorAll('body.wbs-user .card-user-b .btn').forEach((container) => {
             const followed = /\u5df2\u5173\u6ce8/.test(container.textContent || '');
@@ -903,6 +1316,65 @@
         });
     }
 
+    function markArticleLightSurfaces() {
+        if (!/^\/ttarticle\/p\/show(?:\/|$)/.test(location.pathname)) return;
+        const getChannels = (color) => {
+            const match = color.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+            return match ? match.slice(1).map(Number) : null;
+        };
+        const isLight = (color) => {
+            const channels = getChannels(color);
+            return channels && channels.every((channel) => channel >= 230);
+        };
+        const isNeutralDark = (color) => {
+            const channels = getChannels(color);
+            return channels && channels.every((channel) => channel <= 170);
+        };
+
+        document.querySelectorAll('#plc_main :is(.WB_editor_iframe_word, .WB_editor_iframe_new)').forEach((editor) => {
+            const candidates = [
+                editor,
+                ...editor.querySelectorAll('p, h1, h2, h3, h4, h5, h6, div, span, font, strong, em, b, i, section, pre, code, blockquote, table')
+            ];
+
+            candidates.forEach((element) => {
+                if (isLight(getComputedStyle(element).backgroundColor)) {
+                    element.setAttribute('data-weibo-article-light-surface', '');
+                }
+            });
+            candidates.forEach((element) => {
+                const isInsideLightSurface = element.hasAttribute('data-weibo-article-light-surface')
+                    || Boolean(element.parentElement?.closest('[data-weibo-article-light-surface]'));
+                if (isInsideLightSurface && isNeutralDark(getComputedStyle(element).color)) {
+                    element.setAttribute('data-weibo-article-dark-text', '');
+                }
+            });
+        });
+    }
+
+    function markArticleCommentControls() {
+        const comments = document.querySelector('#commonts_container');
+        if (!comments) return;
+
+        comments.querySelectorAll('button').forEach((button) => {
+            button.toggleAttribute('data-weibo-comment-submit', (button.textContent || '').trim() === '\u8bc4\u8bba');
+        });
+
+        comments.querySelectorAll('div, textarea, input, [contenteditable="true"]').forEach((element) => {
+            const style = getComputedStyle(element);
+            const lightBackground = /rgba?\(\s*(2[3-5]\d)\s*,\s*(2[3-5]\d)\s*,\s*(2[3-5]\d)/.test(style.backgroundColor);
+            const lightBorder = [style.borderTopColor, style.borderRightColor, style.borderBottomColor, style.borderLeftColor]
+                .some((color) => /rgba?\(\s*(2[3-5]\d)\s*,\s*(2[3-5]\d)\s*,\s*(2[3-5]\d)/.test(color));
+            const containsEditor = element.matches('textarea, input, [contenteditable="true"]') || element.querySelector('textarea, input, [contenteditable="true"]');
+            if (lightBackground) {
+                element.setAttribute('data-weibo-comment-light-surface', '');
+            }
+            if (containsEditor && (lightBackground || lightBorder)) {
+                element.setAttribute('data-weibo-comment-editor-surface', '');
+            }
+        });
+    }
+
     function repair() {
         pending = false;
         const root = document.documentElement;
@@ -912,6 +1384,7 @@
         const theme = effectiveTheme();
         if (isSearchPage) {
             setPreload(root, false);
+            setArticleTheme(root, false);
             markUserFollowControls();
             markUserRegionPicker();
             markToutiaoArticleCards();
@@ -922,6 +1395,19 @@
         }
 
         setSearchTheme(root, false);
+        const isArticlePage = /^\/ttarticle\/p\/show(?:\/|$)/.test(location.pathname);
+        if (isArticlePage) {
+            setPreload(root, false);
+            markArticleLightSurfaces();
+            markArticleCommentControls();
+            setArticleTheme(root, theme === 'dark');
+            if (root.getAttribute('data-theme') !== theme) {
+                root.setAttribute('data-theme', theme);
+            }
+            return;
+        }
+
+        setArticleTheme(root, false);
         if (!/^\/tv(?:\/|$)/.test(location.pathname)) {
             setPreload(root, false);
             if (root.getAttribute('data-theme') !== theme) {
