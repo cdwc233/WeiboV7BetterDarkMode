@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         微博更好的深色模式
 // @namespace    local.weibo-better-dark-mode
-// @version      1.4.3
+// @version      1.5.0
 // @description  给微博V7提供更好的深色模式
 // @match        https://weibo.com/*
 // @match        https://www.weibo.com/*
@@ -131,6 +131,9 @@
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="feed_list_content"], .card-feed .txt) a[href],
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="feed_list_content"], .card-feed .txt) a[href] * {
                 color: #eb7350 !important;
+            }
+            html[${searchAttribute}] #pl_feedlist_index .card-ai-search_titleText {
+                color: #e7e7e7 !important;
             }
             /* Quoted or reposted posts use their own legacy card surface. */
             html[${searchAttribute}] #pl_feedlist_index .card-comment .con,
@@ -435,15 +438,15 @@
             }
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="commentList"], .WB_feed_repeat) :is(.WB_text, [node-type="comment_content"]) a[href],
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="commentList"], .WB_feed_repeat) :is(.WB_text, [node-type="comment_content"]) a[href] * {
-                color: #ff8200 !important;
+                color: #eb7350 !important;
             }
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="commentList"], .WB_feed_repeat) :is(a.name[href], a.user_name[href], a[usercard][href]),
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="commentList"], .WB_feed_repeat) :is(a.name[href], a.user_name[href], a[usercard][href]) * {
-                color: #ff8200 !important;
+                color: #eb7350 !important;
             }
             html[${searchAttribute}] #pl_feedlist_index .card-together .card-review .txt a[href],
             html[${searchAttribute}] #pl_feedlist_index .card-together .card-review .txt a[href] * {
-                color: #ff8200 !important;
+                color: #eb7350 !important;
             }
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="commentList"], .WB_feed_publish, .WB_feed_repeat) :is([node-type="submit"], .W_btn_a) {
                 background-color: #ff8200 !important;
@@ -458,6 +461,11 @@
                 color: #fff !important;
                 border-color: #ff8200 !important;
             }
+            html[${searchAttribute}] #pl_feedlist_index :is([node-type="commentList"], .WB_feed_publish, .WB_feed_repeat) .s-btn-a.disable {
+                background-color: #814c15 !important;
+                border-color: #814c15 !important;
+                color: #fff !important;
+            }
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="commentList"], .WB_feed_publish, .WB_feed_repeat) .WB_cardmore,
             html[${searchAttribute}] #pl_feedlist_index .WB_cardmore {
                 background-color: #191919 !important;
@@ -470,7 +478,7 @@
             }
             html[${searchAttribute}] #pl_feedlist_index :is([node-type="commentList"], .WB_feed_publish, .WB_feed_repeat) .WB_cardmore:hover :is(a, span),
             html[${searchAttribute}] #pl_feedlist_index .WB_cardmore:hover :is(a, span) {
-                color: #ff8200 !important;
+                color: #eb7350 !important;
             }
             html[${searchAttribute}] #pl_feedlist_index [node-type="feed_list_repeat"] .card-more-a,
             html[${searchAttribute}] #pl_feedlist_index [node-type="feed_list_repeat"] .card-more-a > a {
@@ -480,7 +488,104 @@
             }
             html[${searchAttribute}] #pl_feedlist_index [node-type="feed_list_repeat"] .card-more-a > a:hover,
             html[${searchAttribute}] #pl_feedlist_index [node-type="feed_list_repeat"] .card-more-a > a:hover * {
-                color: #ff8200 !important;
+                color: #eb7350 !important;
+            }
+
+            /* Search-result vote cards. */
+            html[${searchAttribute}] #pl_feedlist_index [class*="card-vote_wrap"] {
+                background-color: #131313 !important;
+                border-color: #353535 !important;
+                color: #e7e7e7 !important;
+            }
+            html[${searchAttribute}] #pl_feedlist_index [class*="card-vote_wrap"] :is([class*="card-vote_tit"], [class*="vote-item_text"], [class*="vote-item_cut"]) {
+                color: #e7e7e7 !important;
+            }
+            html[${searchAttribute}] #pl_feedlist_index [class*="card-vote_wrap"] :is([class*="vote-item_item"], .woo-panel-main) {
+                background-color: #191919 !important;
+                border-color: #353535 !important;
+                color: #e7e7e7 !important;
+            }
+            html[${searchAttribute}] #pl_feedlist_index [class*="card-vote_wrap"] [class*="vote-item_bg"] {
+                background-color: #2c2c2c !important;
+            }
+            html[${searchAttribute}] #pl_feedlist_index [class*="card-vote_wrap"] :is([class*="vote-item_right"], [class*="card-vote_info"]) {
+                color: #a9a9a9 !important;
+            }
+            html[${searchAttribute}] #pl_feedlist_index [class*="card-vote_wrap"] [class*="card-vote_info"] a[href] {
+                color: #eb7350 !important;
+            }
+            html[${searchAttribute}] #pl_feedlist_index [class*="card-vote_wrap"] [class*="vote-item_item"]:hover {
+                border-color: #eb7350 !important;
+            }
+
+            /* Legacy expression picker used by search-result comments. */
+            html[${searchAttribute}] .m-layer-face,
+            html[${searchAttribute}] .m-layer-face :is(.face-box, .tab, .face) {
+                background-color: #191919 !important;
+                border-color: #454545 !important;
+                color: #e7e7e7 !important;
+            }
+            html[${searchAttribute}] .m-layer-face [node-type="categorys"] {
+                border-color: #353535 !important;
+            }
+            html[${searchAttribute}] .m-layer-face [node-type="categorys"] a {
+                background-color: transparent !important;
+                border-color: transparent !important;
+            }
+            html[${searchAttribute}] .m-layer-face [node-type="categorys"] a.cur {
+                background-color: #191919 !important;
+                border-bottom-color: #eb7350 !important;
+            }
+            /* Category tabs draw the same kind of pseudo-element hover circle as the face cells. */
+            html[${searchAttribute}] .m-layer-face [node-type="categorys"] a:hover::before,
+            html[${searchAttribute}] .m-layer-face [node-type="categorys"] a:hover::after,
+            html[${searchAttribute}] .m-layer-face [node-type="categorys"] li:hover::before,
+            html[${searchAttribute}] .m-layer-face [node-type="categorys"] li:hover::after {
+                background-color: #2E2318 !important;
+            }
+            html[${searchAttribute}] .m-layer-face :is([node-type="hotFace"], .faces_list) li {
+                background-color: transparent !important;
+            }
+            html[${searchAttribute}] .m-layer-face :is([node-type="hotFace"], .faces_list) li > a {
+                background-color: transparent !important;
+                border-radius: 50% !important;
+            }
+            html[${searchAttribute}] .m-layer-face :is([node-type="hotFace"], .faces_list) li:hover > a {
+                background-color: transparent !important;
+            }
+            /* The native hover highlight is a light circle drawn by the cell's ::after pseudo-element. */
+            html[${searchAttribute}] .m-layer-face :is([node-type="hotFace"], .faces_list) li:hover::after,
+            html[${searchAttribute}] .m-layer-face :is([node-type="hotFace"], .faces_list) li:hover > a::after {
+                background-color: #2E2318 !important;
+            }
+            html[${searchAttribute}] .m-layer-face [node-type="inner"]::-webkit-scrollbar-track {
+                background-color: #191919 !important;
+            }
+            html[${searchAttribute}] .m-layer-face [node-type="inner"]::-webkit-scrollbar-thumb {
+                background-color: #454545 !important;
+            }
+            html[${searchAttribute}] .m-layer-face .arrow .br {
+                border-bottom-color: #454545 !important;
+            }
+            html[${searchAttribute}] .m-layer-face .arrow .bg {
+                border-bottom-color: #191919 !important;
+            }
+
+            /* The gray link rule above overrides Weibo's native orange hover and the inline
+               orange style injected while a comment thread is open, so restore it explicitly. */
+            html[${searchAttribute}] #pl_feedlist_index .card-act :is(a[action-type="feed_list_forward"], a[action-type="feed_list_comment"], a[action-type="feed_list_like"]):hover,
+            html[${searchAttribute}] #pl_feedlist_index .card-act :is(a[action-type="feed_list_forward"], a[action-type="feed_list_comment"], a[action-type="feed_list_like"]):hover *,
+            html[${searchAttribute}] #pl_feedlist_index .card-act a[action-type="feed_list_comment"][style*="--w-brand"],
+            html[${searchAttribute}] #pl_feedlist_index .card-act a[action-type="feed_list_comment"][style*="--w-brand"] * {
+                color: #eb7350 !important;
+            }
+            /* Match the like hover treatment without altering its active state. */
+            html[${searchAttribute}] #pl_feedlist_index .card-feed .card-act li:nth-child(-n + 2) > a:hover :is(.wbicon, .woo-font, .W_ficon, svg) {
+                border-radius: 50% !important;
+                background-color: #302316 !important;
+                box-shadow: 0 0 0 9px #302316 !important;
+                color: #eb7350 !important;
+                fill: #eb7350 !important;
             }
 
             /* Forward dialog. */
